@@ -5,7 +5,7 @@ import Web3Modal from "@web3modal/react";
 import { providers, Contract } from "ethers";
 import { useEffect, useRef, useState } from "react";
 import { useProvider, useAccount, useSigner, useContract } from "wagmi";
-
+import { ethers } from "ethers";
 export default function Home() {
 	// walletConnected keep track of whether the user's wallet is connected or not
 	const [walletConnected, setWalletConnected] = useState(false);
