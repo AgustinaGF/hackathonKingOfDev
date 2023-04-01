@@ -12,15 +12,126 @@ export default function Home() {
 	const [contractSent, setContractSent] = useState(false);
 	const provider = useProvider();
 	const { data: signer, isError, isLoading } = useSigner();
-
 	const contract = useContract({
-		address: "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
+		address: '0xB1D11a2b59bB6B0c5D61A2eE765ceb8779941b57',
 		signerOrProvider: signer,
-	});
-
-	// Create a reference to the Web3 Modal (used for connecting to Metamask) which persists as long as the page is open
-	const { address, isConnecting, isDisconnected } = useAccount();
-	console.log("adress", address, provider, signer);
+	  })
+	  const contractHackatonABI = [
+		{
+		  inputs: [],
+		  stateMutability: "nonpayable",
+		  type: "constructor",
+		},
+		{
+		  anonymous: false,
+		  inputs: [
+			{
+			  indexed: false,
+			  internalType: "uint256",
+			  name: "id",
+			  type: "uint256",
+			},
+		  ],
+		  name: "StringDataAdded",
+		  type: "event",
+		},
+		{
+		  inputs: [
+			{
+			  internalType: "string",
+			  name: "_string1",
+			  type: "string",
+			},
+			{
+			  internalType: "string",
+			  name: "_string2",
+			  type: "string",
+			},
+			{
+			  internalType: "string",
+			  name: "_string3",
+			  type: "string",
+			},
+			{
+			  internalType: "string",
+			  name: "_string4",
+			  type: "string",
+			},
+			{
+			  internalType: "string",
+			  name: "_string5",
+			  type: "string",
+			},
+		  ],
+		  name: "addStringData",
+		  outputs: [],
+		  stateMutability: "nonpayable",
+		  type: "function",
+		},
+		{
+		  inputs: [
+			{
+			  internalType: "uint256",
+			  name: "_id",
+			  type: "uint256",
+			},
+		  ],
+		  name: "getStringData",
+		  outputs: [
+			{
+			  internalType: "string",
+			  name: "",
+			  type: "string",
+			},
+			{
+			  internalType: "string",
+			  name: "",
+			  type: "string",
+			},
+			{
+			  internalType: "string",
+			  name: "",
+			  type: "string",
+			},
+			{
+			  internalType: "string",
+			  name: "",
+			  type: "string",
+			},
+			{
+			  internalType: "string",
+			  name: "",
+			  type: "string",
+			},
+		  ],
+		  stateMutability: "view",
+		  type: "function",
+		},
+	  ];
+	
+			// Create a reference to the Web3 Modal (used for connecting to Metamask) which persists as long as the page is open
+		  const { address, isConnecting, isDisconnected } = useAccount()
+		  console.log("adress", address , provider ,signer)
+	
+	
+	
+		  async function contract2(){
+		  const factory = new ethers.Contract(
+			"0xB1D11a2b59bB6B0c5D61A2eE765ceb8779941b57",
+			contractHackatonABI,
+			signer!
+		  );
+		  
+		  const add = await factory.addStringData("gonzaa", "agus", "fecha3333", "fecha2022", "hash2022")
+		  const tx = add.wait()
+		  console.log(tx)
+		//   console.log(provider)
+		//   console.log(signer)
+		//   console.log(useSigner)
+		  console.log(factory)
+		  
+		  }
+		  contract2()  //llama a la funcion async, esto debemos de conectarlo con el submit del formulario
 
 	return (
 		<>
