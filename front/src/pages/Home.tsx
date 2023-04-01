@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import ButtonWallet from "../components/ButtonWallet";
+import { Web3Button } from "@web3modal/react";
 
 export default function Home() {
 	return (
@@ -15,7 +15,7 @@ export default function Home() {
 				<Typography>Keywise</Typography>
 				<Typography>Sarasa</Typography>
 				<Box>
-					<ButtonWallet />
+					<Web3Button />
 				</Box>
 			</Box>
 		</>
