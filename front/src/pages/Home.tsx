@@ -6,6 +6,8 @@ import { providers, Contract } from "ethers";
 import { useEffect, useRef, useState } from "react";
 import { useProvider, useAccount, useSigner, useContract } from "wagmi";
 import { ethers } from "ethers";
+import { useNavigate } from "react-router-dom";
+
 export default function Home() {
 	// walletConnected keep track of whether the user's wallet is connected or not
 	const [walletConnected, setWalletConnected] = useState(false);
@@ -16,6 +18,7 @@ export default function Home() {
 		address: "0xB1D11a2b59bB6B0c5D61A2eE765ceb8779941b57",
 		signerOrProvider: signer,
 	});
+
 	const contractHackatonABI = [
 		{
 			inputs: [],
@@ -113,28 +116,38 @@ export default function Home() {
 	const { address, isConnecting, isDisconnected } = useAccount();
 	console.log("adress", address, provider, signer);
 
-	async function contract2() {
-		const factory = new ethers.Contract(
-			"0xB1D11a2b59bB6B0c5D61A2eE765ceb8779941b57",
-			contractHackatonABI,
-			signer!
-		);
+	const navigate = useNavigate();
 
-		const add = await factory.addStringData(
-			"gonzaa",
-			"agus",
-			"fecha3333",
-			"fecha2022",
-			"hash2022"
-		);
-		const tx = add.wait();
-		console.log(tx);
-		//   console.log(provider)
-		//   console.log(signer)
-		//   console.log(useSigner)
-		console.log(factory);
-	}
-	contract2(); //llama a la funcion async, esto debemos de conectarlo con el submit del formulario
+	// redirect
+	useEffect(() => {
+		if (address) {
+			navigate("/register");
+		}
+	}, [address]);
+
+	// async function contract2() {
+	// 	const factory = new ethers.Contract(
+	// 		"0xB1D11a2b59bB6B0c5D61A2eE765ceb8779941b57",
+	// 		contractHackatonABI,
+	// 		signer!
+	// 	);
+
+	// 	////Esta Funcion es la que se va a ejecutar cuando hacemos el submit con la data del form
+	// 	const add = await factory.addStringData(
+	// 		"gonzaa",
+	// 		"agus",
+	// 		"fecha3333",
+	// 		"fecha2022",
+	// 		"hash2022"
+	// 	);
+	// 	const tx = add.wait();
+	// 	console.log(tx);
+	// 	//   console.log(provider)
+	// 	//   console.log(signer)
+	// 	//   console.log(useSigner)
+	// 	console.log(factory);
+	// }
+	// contract2(); //llama a la funcion async, esto debemos de conectarlo con el submit del formulario
 
 	return (
 		<>
