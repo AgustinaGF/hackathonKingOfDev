@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Register from "./pages/Register";
+import SaveContract from "./pages/SaveContract";
 
 import {
 	EthereumClient,
@@ -27,8 +28,9 @@ function App() {
 	return (
 		<WagmiConfig client={wagmiClient}>
 			<Routes>
-				<Route path="/" element={<Home />}></Route>
-				<Route path="/register" element={<Register />}></Route>
+				<Route path="/" element={<Home />} />
+				<Route path="/register" element={<Register />} />
+				<Route path="/save" element={<SaveContract />} />
 			</Routes>
 			<Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
 		</WagmiConfig>
