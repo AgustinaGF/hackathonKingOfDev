@@ -2,11 +2,12 @@ import { Box, Typography, Card } from "@mui/material";
 import { Web3Button } from "@web3modal/react";
 import city from "./../assets/city.png";
 import Web3Modal from "@web3modal/react";
-import { providers, Contract } from "ethers";
+// import { providers, Contract } from "ethers";
 import { useEffect, useRef, useState } from "react";
 import { useProvider, useAccount, useSigner, useContract } from "wagmi";
-import { ethers } from "ethers";
+// import { ethers } from "ethers";
 import { useNavigate } from "react-router-dom";
+import Sidebar from "../components/Sidebar";
 
 export default function Home() {
 	// walletConnected keep track of whether the user's wallet is connected or not
@@ -14,6 +15,9 @@ export default function Home() {
 	const [contractSent, setContractSent] = useState(false);
 	const provider = useProvider();
 	const { data: signer, isError, isLoading } = useSigner();
+	// Create a reference to the Web3 Modal (used for connecting to Metamask) which persists as long as the page is open
+	const { address, isConnecting, isDisconnected } = useAccount();
+	console.log( "adress", address, provider, signer );
 	const contract = useContract({
 		address: "0xB1D11a2b59bB6B0c5D61A2eE765ceb8779941b57",
 		signerOrProvider: signer,
@@ -112,9 +116,7 @@ export default function Home() {
 		},
 	];
 
-	// Create a reference to the Web3 Modal (used for connecting to Metamask) which persists as long as the page is open
-	const { address, isConnecting, isDisconnected } = useAccount();
-	console.log("adress", address, provider, signer);
+
 
 	const navigate = useNavigate();
 
@@ -164,6 +166,18 @@ export default function Home() {
 						bottom: 0,
 					}}
 				>
+					<Box 
+						sx={{
+							alignItems: "left",
+							position: "fixed",
+							display: "flex",
+							justifyContent: "center",
+							flexDirection: "column",
+							bottom: 850,
+						}}
+					>
+						<Sidebar />
+					</Box>
 					<Typography
 						variant="h1"
 						sx={{
