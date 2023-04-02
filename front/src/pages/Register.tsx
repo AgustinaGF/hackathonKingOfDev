@@ -6,6 +6,7 @@ import { User } from "../typings/index";
 import abiContract from "../abiContractV1NFT.json";
 import { useProvider, useAccount, useSigner, useContract } from "wagmi";
 import { ethers } from "ethers";
+import { useState } from "react";
 
 
 const validationSchema: ObjectSchema<User> = object({
@@ -29,6 +30,9 @@ const validationSchema: ObjectSchema<User> = object({
 
 //REEMPLAZAR TODA LA INFO QUE VIENE DE WALLET DE HASH Y DE CONTRATO POR LOS DATOS DE ESTADO PARA MANDAR EL FORM
 export default function Register() {
+	const [hashPDF, setHash]= useState('')
+
+	
 	const formik = useFormik({
 		initialValues: {
 			fullName: "fullName",
@@ -52,7 +56,7 @@ export default function Register() {
 		onSubmit: (values) => {
 			alert(JSON.stringify(values, null, 2));
 			// console.log(values.fullName, values.dni)
-			contract2(values) //instancia la async function contract
+			contract2(values, hashPDF) //instancia la async function contract
 		},
 	});
 
@@ -71,12 +75,14 @@ export default function Register() {
 		const file = files[0];
 		const hashValue = await encodeFile(file);
 		console.log(hashValue);
+		setHash(hashValue)
+		// contract2(hashValue)
 	  }
 
 	const { data: signer, isError, isLoading } = useSigner();
 
 
-	async function contract2(values: { fullName: any; email: any; phone?: number; dni: any; status?: string; account?: string; contractName?: string; deposit?: number; rent?: number; transactionHash?: string; file?: string; streetName?: string; streetNumber?: number; city?: string; state?: string; zipCode?: number; address?: any; }) {
+	async function contract2(values: { fullName: any; email: any; phone?: number; dni: any; status?: string; account?: string; contractName?: string; deposit?: number; rent?: number; transactionHash?: string; file?: string; streetName?: string; streetNumber?: number; city?: string; state?: string; zipCode?: number; address?: any; }, hashPDF: string) {
 		const factory = new ethers.Contract(
 			"0xd9369d77c799Bda1fc320764Ce228e9824181400",
 			abiContract,
@@ -90,7 +96,9 @@ export default function Register() {
 			values.dni,
 			values.deposit,
 			values.dni,
-			values.fullName
+			hashPDF,
+
+				
 
 			// values.fullName,
 			// values.email,
