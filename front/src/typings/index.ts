@@ -1,7 +1,7 @@
 export interface User {
     fullName?: string
     email?: string
-    phone?: number
+    phone?: string
     dni?: number
     status?: string
     account?: string

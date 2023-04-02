@@ -2,11 +2,12 @@ import { Box, Typography, Card } from "@mui/material";
 import { Web3Button } from "@web3modal/react";
 import city from "./../assets/city.png";
 import Web3Modal from "@web3modal/react";
-import { providers, Contract } from "ethers";
+// import { providers, Contract } from "ethers";
 import { useEffect, useRef, useState } from "react";
 import { useProvider, useAccount, useSigner, useContract } from "wagmi";
-import { ethers } from "ethers";
+// import { ethers } from "ethers";
 import { useNavigate } from "react-router-dom";
+import Sidebar from "../components/Sidebar";
 
 export default function Home() {
 	// walletConnected keep track of whether the user's wallet is connected or not
@@ -165,6 +166,18 @@ export default function Home() {
 						bottom: 0,
 					}}
 				>
+					<Box 
+						sx={{
+							alignItems: "left",
+							position: "fixed",
+							display: "flex",
+							justifyContent: "center",
+							flexDirection: "column",
+							bottom: 850,
+						}}
+					>
+						<Sidebar />
+					</Box>
 					<Typography
 						variant="h1"
 						sx={{
