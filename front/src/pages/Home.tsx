@@ -15,6 +15,9 @@ export default function Home() {
 	const [contractSent, setContractSent] = useState(false);
 	const provider = useProvider();
 	const { data: signer, isError, isLoading } = useSigner();
+	// Create a reference to the Web3 Modal (used for connecting to Metamask) which persists as long as the page is open
+	const { address, isConnecting, isDisconnected } = useAccount();
+	console.log( "adress", address, provider, signer );
 	const contract = useContract({
 		address: "0xB1D11a2b59bB6B0c5D61A2eE765ceb8779941b57",
 		signerOrProvider: signer,
@@ -113,9 +116,7 @@ export default function Home() {
 		},
 	];
 
-	// Create a reference to the Web3 Modal (used for connecting to Metamask) which persists as long as the page is open
-	const { address, isConnecting, isDisconnected } = useAccount();
-	console.log("adress", address, provider, signer);
+
 
 	const navigate = useNavigate();
 

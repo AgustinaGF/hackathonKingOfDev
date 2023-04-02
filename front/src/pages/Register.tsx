@@ -1,18 +1,60 @@
 import { Box, Typography, Card, TextField, Button, Grid } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
-import { useFormik, useField } from "formik";
+import { useFormik } from "formik";
 import { object, number, string, ObjectSchema } from "yup";
 import { User } from "../typings/index";
 import abiContract from "../abiContractV1NFT.json";
 import { useProvider, useAccount, useSigner, useContract } from "wagmi";
 import { ethers } from "ethers";
+
 import { Link } from "react-router-dom";
 // import { Sidebar } from "../components/Sidebar";
 
-const validationSchema: ObjectSchema<User> = object({
+import { gql, useMutation } from '@apollo/client';
+
+
+
+
+interface AddUserData {
+	addUser: User;
+}
+
+const ADD_USER = gql`
+  mutation CreateUser($fullName:String!, $email: String!,$phone: String!,$dni: Int!,$status: String!,$account: EVMAccountAddress!,$contractName: String!,$deposit: Int!,$rent:Int!,$transactionHash:String!,$file: String!,$streetName: String!,$streetNumber: Int!,$city:String!,$state: String!,$zipCode: Int!) {
+    createUser(  
+		user:{ fullName: $fullName, email: $email,phone:$phone,dni: $dni, status: $status,account: $account,contractName: $contractName, deposit: $deposit,rent: $rent,transactionHash: $transactionHash, file: $file,streetName: $streetName,streetNumber: $streetNumber,city: $city,state:$state,zipCode:$zipCode}
+		){
+    txHash
+    user {
+      id
+	fullName
+      email
+	  phone
+	  dni
+	  status
+	  account
+	  contractName
+	  deposit
+	  rent
+	  transactionHash
+	  file
+	  streetName
+	  streetNumber
+	  city
+	  state
+	  zipCode
+    }
+  }
+	
+  }
+`;
+
+
+
+const validationSchema: ObjectSchema<User> = object( {
 	fullName: string(),
 	email: string(),
-	phone: number(),
+	phone: string(),
 	dni: number(),
 	status: string(),
 	account: string(),
@@ -26,23 +68,27 @@ const validationSchema: ObjectSchema<User> = object({
 	city: string(),
 	state: string(),
 	zipCode: number(),
-});
+} );
 
 //REEMPLAZAR TODA LA INFO QUE VIENE DE WALLET DE HASH Y DE CONTRATO POR LOS DATOS DE ESTADO PARA MANDAR EL FORM
 export default function Register() {
-	const formik = useFormik({
+	const [addUser] = useMutation<AddUserData>( ADD_USER );
+	const { address } = useAccount();
+	let wallet = address;
+
+	const formik = useFormik( {
 		initialValues: {
 			fullName: "fullName",
 			email: "email@example.com",
-			phone: 2215774990,
+			phone: "2215778293",
 			dni: 3902344,
 			status: "Propietario",
-			account: "0x98217389398700124",
+			account: wallet?.toString(),
 			contractName: "Alquiler comercial",
 			deposit: 9872198,
 			rent: 92012,
 			transactionHash: "jgsaueier",
-			file: "lsdkpeafpew",
+			file: "https://www.metamask.io",
 			streetName: "Av Siempre Viva",
 			streetNumber: 121312,
 			city: "CABA",
@@ -50,12 +96,29 @@ export default function Register() {
 			zipCode: 1022,
 		},
 		validationSchema: validationSchema,
-		onSubmit: (values) => {
-			alert(JSON.stringify(values, null, 2));
+		onSubmit: ( values ) => {
+			const { fullName, email, phone, dni, status, account, contractName, deposit, rent, transactionHash, file, streetName, streetNumber, city, state, zipCode }= values 
+
+			addUser( { variables: { fullName, email, phone, dni, status, account, contractName, deposit, rent, transactionHash, file, streetName, streetNumber, city, state, zipCode } } )
+
+
+			alert( JSON.stringify( values, null, 2 ) );
 			// console.log(values.fullName, values.dni)
+
 			contract2(values); //instancia la async function contract
+
 		},
-	});
+	} );
+
+
+	// const handleSubmit = ( e: React.FormEvent<HTMLFormElement> ) => {
+	// 	e.preventDefault();
+	// 	addUser( { variables: { title, author } } );
+	// 	setTitle( '' );
+	// 	setAuthor( '' );
+	// };
+
+
 
 	// sha256
 	async function encodeFile(files: any) {
@@ -94,6 +157,7 @@ export default function Register() {
 		zipCode?: number;
 		address?: any;
 	}) {
+
 		const factory = new ethers.Contract(
 			"0xd9369d77c799Bda1fc320764Ce228e9824181400",
 			abiContract,
@@ -114,14 +178,16 @@ export default function Register() {
 			// values.fullName,
 			// values.address,
 			// values.fullName,
+
 		);
 		const tx = add.wait();
 		const hash = add.hash;
-		console.log(hash);
+		console.log( hash );
+
 		//   console.log(provider)
 		//   console.log(signer)
 		//   console.log(useSigner)
-		console.log(factory);
+		console.log( factory );
 	}
 
 	return (
@@ -204,7 +270,7 @@ export default function Register() {
 								value={formik.values.fullName}
 								onChange={formik.handleChange}
 								error={
-									formik.touched.fullName && Boolean(formik.errors.fullName)
+									formik.touched.fullName && Boolean( formik.errors.fullName )
 								}
 								helperText={formik.touched.fullName && formik.errors.fullName}
 								fullWidth
@@ -233,7 +299,7 @@ export default function Register() {
 								type="number"
 								value={formik.values.dni}
 								onChange={formik.handleChange}
-								error={formik.touched.dni && Boolean(formik.errors.dni)}
+								error={formik.touched.dni && Boolean( formik.errors.dni )}
 								helperText={formik.touched.dni && formik.errors.dni}
 								sx={{
 									"& .MuiOutlinedInput-root": {
@@ -257,10 +323,10 @@ export default function Register() {
 								placeholder="Phone"
 								id="phone"
 								name="phone"
-								type="number"
-								value={formik.values.phone}
+								type="text"
+								value={formik.values.phone.toString()}
 								onChange={formik.handleChange}
-								error={formik.touched.phone && Boolean(formik.errors.phone)}
+								error={formik.touched.phone && Boolean( formik.errors.phone )}
 								helperText={formik.touched.phone && formik.errors.phone}
 								fullWidth
 								sx={{
@@ -288,7 +354,7 @@ export default function Register() {
 								type="email"
 								value={formik.values.email}
 								onChange={formik.handleChange}
-								error={formik.touched.email && Boolean(formik.errors.email)}
+								error={formik.touched.email && Boolean( formik.errors.email )}
 								helperText={formik.touched.email && formik.errors.email}
 								fullWidth
 								sx={{
@@ -315,7 +381,7 @@ export default function Register() {
 								name="status"
 								value={formik.values.status}
 								onChange={formik.handleChange}
-								error={formik.touched.status && Boolean(formik.errors.status)}
+								error={formik.touched.status && Boolean( formik.errors.status )}
 								helperText={formik.touched.status && formik.errors.status}
 								fullWidth
 								sx={{
@@ -342,7 +408,7 @@ export default function Register() {
 								name="account"
 								value={formik.values.account}
 								onChange={formik.handleChange}
-								error={formik.touched.account && Boolean(formik.errors.account)}
+								error={formik.touched.account && Boolean( formik.errors.account )}
 								helperText={formik.touched.account && formik.errors.account}
 								fullWidth
 								sx={{
@@ -373,7 +439,7 @@ export default function Register() {
 								value={formik.values.streetName}
 								onChange={formik.handleChange}
 								error={
-									formik.touched.streetName && Boolean(formik.errors.streetName)
+									formik.touched.streetName && Boolean( formik.errors.streetName )
 								}
 								helperText={
 									formik.touched.streetName && formik.errors.streetName
@@ -411,7 +477,7 @@ export default function Register() {
 								onChange={formik.handleChange}
 								error={
 									formik.touched.streetNumber &&
-									Boolean(formik.errors.streetNumber)
+									Boolean( formik.errors.streetNumber )
 								}
 								helperText={
 									formik.touched.streetNumber && formik.errors.streetNumber
@@ -441,7 +507,7 @@ export default function Register() {
 								name="city"
 								value={formik.values.city}
 								onChange={formik.handleChange}
-								error={formik.touched.city && Boolean(formik.errors.city)}
+								error={formik.touched.city && Boolean( formik.errors.city )}
 								helperText={formik.touched.city && formik.errors.city}
 								fullWidth
 								sx={{
@@ -468,7 +534,7 @@ export default function Register() {
 								name="state"
 								value={formik.values.state}
 								onChange={formik.handleChange}
-								error={formik.touched.state && Boolean(formik.errors.state)}
+								error={formik.touched.state && Boolean( formik.errors.state )}
 								helperText={formik.touched.state && formik.errors.state}
 								fullWidth
 								sx={{
@@ -496,7 +562,7 @@ export default function Register() {
 								type="number"
 								value={formik.values.zipCode}
 								onChange={formik.handleChange}
-								error={formik.touched.zipCode && Boolean(formik.errors.zipCode)}
+								error={formik.touched.zipCode && Boolean( formik.errors.zipCode )}
 								helperText={formik.touched.zipCode && formik.errors.zipCode}
 								fullWidth
 								sx={{
@@ -530,7 +596,7 @@ export default function Register() {
 								onChange={formik.handleChange}
 								error={
 									formik.touched.contractName &&
-									Boolean(formik.errors.contractName)
+									Boolean( formik.errors.contractName )
 								}
 								helperText={
 									formik.touched.contractName && formik.errors.contractName
@@ -566,7 +632,7 @@ export default function Register() {
 								}}
 								value={formik.values.deposit}
 								onChange={formik.handleChange}
-								error={formik.touched.deposit && Boolean(formik.errors.deposit)}
+								error={formik.touched.deposit && Boolean( formik.errors.deposit )}
 								helperText={formik.touched.deposit && formik.errors.deposit}
 								fullWidth
 								sx={{
@@ -599,7 +665,7 @@ export default function Register() {
 								}}
 								value={formik.values.rent}
 								onChange={formik.handleChange}
-								error={formik.touched.rent && Boolean(formik.errors.rent)}
+								error={formik.touched.rent && Boolean( formik.errors.rent )}
 								helperText={formik.touched.rent && formik.errors.rent}
 								fullWidth
 								sx={{
@@ -632,7 +698,9 @@ export default function Register() {
 									type="file"
 									id="files"
 									style={{ visibility: "hidden" }}
-									onChange={(e) => generateEncode(e.target.files)}
+
+									onChange={( e ) => convertBase44( e.target.files )}
+
 								/>
 							</Button>
 						</Grid>
