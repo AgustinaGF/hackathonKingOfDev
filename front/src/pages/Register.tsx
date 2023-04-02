@@ -2,7 +2,7 @@ import { Box, Typography, Card, TextField, Button, Grid } from "@mui/material";
 import { useFormik ,useField} from 'formik';
 import {object , number , string ,ObjectSchema}from 'yup';
 import { User } from "../typings/index";
-import {Formik,Form , FormikProps} from 'formik'
+
 
 const validationSchema :ObjectSchema<User> = object( {
 	fullName: string(),
@@ -75,6 +75,7 @@ export default function Register() {
 										id="fullName"
 										name="fullName"
 										placeholder="fullName"
+										
 										value={formik.values.fullName}
 										onChange={formik.handleChange}
 										error={formik.touched.fullName && Boolean( formik.errors.fullName )}
