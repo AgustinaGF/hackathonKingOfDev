@@ -1,25 +1,23 @@
 export interface User {
     fullName?: string
     email?: string
-    address?: Address
-    number?: number
+    phone?: number
     dni?: number
     status?: string
     account?: string
-    contracts?: Contract
-}
-
-export interface Contract {
-    name?: string
-    price?: number
+    contractName?: string
+    deposit?: number
+    rent?:number
     transactionHash?: string
     file?:string 
-}
-
-export interface Address {
     streetName?: string
-    streetNumber?: string
+    streetNumber?: number
     city?: string
     state?: string
     zipCode?: number
 }
+
+
+
+
+

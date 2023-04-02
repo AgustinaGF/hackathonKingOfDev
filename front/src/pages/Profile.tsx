@@ -1,1 +1,1 @@
-import { User, Contract, Address } from "../typings/index";
+import { User } from "../typings/index";
