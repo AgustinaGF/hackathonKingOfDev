@@ -3,6 +3,10 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { useFormik, useField } from "formik";
 import { object, number, string, ObjectSchema } from "yup";
 import { User } from "../typings/index";
+import abiContract from "../abiContract.json";
+import { useProvider, useAccount, useSigner, useContract } from "wagmi";
+import { ethers } from "ethers";
+
 
 const validationSchema: ObjectSchema<User> = object({
 	fullName: string(),
@@ -47,6 +51,8 @@ export default function Register() {
 		validationSchema: validationSchema,
 		onSubmit: (values) => {
 			alert(JSON.stringify(values, null, 2));
+			// console.log(values.fullName, values.dni)
+			contract2(values) //instancia la async function contract
 		},
 	});
 
@@ -64,6 +70,40 @@ export default function Register() {
 			};
 		});
 	};
+
+	const { data: signer, isError, isLoading } = useSigner();
+
+
+	async function contract2(values: { fullName: any; email: any; phone?: number; dni: any; status?: string; account?: string; contractName?: string; deposit?: number; rent?: number; transactionHash?: string; file?: string; streetName?: string; streetNumber?: number; city?: string; state?: string; zipCode?: number; address?: any; }) {
+		const factory = new ethers.Contract(
+			"0xB1D11a2b59bB6B0c5D61A2eE765ceb8779941b57",
+			abiContract,
+			signer!
+		);
+
+		////Esta Funcion es la que se va a ejecutar cuando hacemos el submit con la data del form
+		const add = await factory.addStringData(
+			values.fullName,
+			values.fullName,
+			values.fullName,
+			values.fullName,
+			values.fullName
+
+			// values.fullName,
+			// values.email,
+			// values.fullName,
+			// values.address,
+			// values.fullName,
+			
+		);
+		const tx = add.wait();
+		const hash = add.hash
+		console.log(hash);
+		//   console.log(provider)
+		//   console.log(signer)
+		//   console.log(useSigner)
+		console.log(factory);
+	}
 
 	return (
 		<>
