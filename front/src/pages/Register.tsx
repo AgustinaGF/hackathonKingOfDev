@@ -181,8 +181,7 @@ const [addUser] = useMutation<AddUserData>( ADD_USER );
 							fontFamily: "'lato'",
 						}}
 					>
-						Lorem ipsum ddolor sit amet, consectetur adipiscing elit, sed do
-						eiusmodtempor incididunt ut labore et dolore magna aliqua.
+						Los mejores sueños empiezan viviendo bien 
 					</Typography>
 					<Typography>Datos del Usuario</Typography>
 				</Box>
