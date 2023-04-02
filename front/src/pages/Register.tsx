@@ -1,8 +1,26 @@
 import { Box, Typography, Card, TextField, Button, Grid } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
-import { useFormik, useField } from "formik";
+import { useAccount} from "wagmi";
+import { useFormik } from "formik";
 import { object, number, string, ObjectSchema } from "yup";
 import { User } from "../typings/index";
+import { gql, useMutation } from '@apollo/client';
+
+
+interface AddUserData {
+	addUser: User;
+}
+
+const ADD_USER = gql`
+  mutation AddBook($title: String!, $author: String!) {
+    addBook(title: $title, author: $author) {
+      title
+      author
+    }
+  }
+`;
+
+
 
 const validationSchema: ObjectSchema<User> = object({
 	fullName: string(),
@@ -25,6 +43,10 @@ const validationSchema: ObjectSchema<User> = object({
 
 //REEMPLAZAR TODA LA INFO QUE VIENE DE WALLET DE HASH Y DE CONTRATO POR LOS DATOS DE ESTADO PARA MANDAR EL FORM
 export default function Register() {
+const [addUser] = useMutation<AddUserData>( ADD_USER );
+	const { address } = useAccount()
+	let wallet = address
+
 	const formik = useFormik({
 		initialValues: {
 			fullName: "fullName",
@@ -32,7 +54,7 @@ export default function Register() {
 			phone: 2215774990,
 			dni: 3902344,
 			status: "Propietario",
-			account: "0x98217389398700124",
+			account: wallet?.toString(),
 			contractName: "Alquiler comercial",
 			deposit: 9872198,
 			rent: 92012,
@@ -49,6 +71,15 @@ export default function Register() {
 			alert(JSON.stringify(values, null, 2));
 		},
 	});
+
+
+	// const handleSubmit = ( e: React.FormEvent<HTMLFormElement> ) => {
+	// 	e.preventDefault();
+	// 	addUser( { variables: { title, author } } );
+	// 	setTitle( '' );
+	// 	setAuthor( '' );
+	// };
+
 
 	// Convert in base 44 our file
 	const convertBase44 = (files: any) => {
