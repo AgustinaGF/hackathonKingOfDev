@@ -3,7 +3,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { useFormik, useField } from "formik";
 import { object, number, string, ObjectSchema } from "yup";
 import { User } from "../typings/index";
-import abiContract from "../abiContract.json";
+import abiContract from "../abiContractV1NFT.json";
 import { useProvider, useAccount, useSigner, useContract } from "wagmi";
 import { ethers } from "ethers";
 
@@ -56,37 +56,40 @@ export default function Register() {
 		},
 	});
 
-	// Convert in base 44 our file
-	const convertBase44 = (files: any) => {
-		new Promise((resolve, reject) => {
-			const fileReader = new FileReader();
-			console.log(files[0], "hhh");
-			fileReader.readAsDataURL(files![0]);
-			fileReader.onload = () => {
-				const base44 = (fileReader.result as string).substring(
-					(fileReader.result as string).indexOf(",") + 1
-				);
-				console.log(base44);
-			};
-		});
-	};
+
+	// sha256 
+	async function encodeFile(files: any) {
+		const fileData = new Uint8Array(await files.arrayBuffer());
+		const hashBuffer = await crypto.subtle.digest("SHA-256", fileData);
+		const hashArray = Array.from(new Uint8Array(hashBuffer));
+		const hashHex = hashArray
+		  .map((b) => b.toString(16).padStart(2, "0"))
+		  .join("");
+		return hashHex;
+	  }
+	  async function generateEncode(files: any) {
+		const file = files[0];
+		const hashValue = await encodeFile(file);
+		console.log(hashValue);
+	  }
 
 	const { data: signer, isError, isLoading } = useSigner();
 
 
 	async function contract2(values: { fullName: any; email: any; phone?: number; dni: any; status?: string; account?: string; contractName?: string; deposit?: number; rent?: number; transactionHash?: string; file?: string; streetName?: string; streetNumber?: number; city?: string; state?: string; zipCode?: number; address?: any; }) {
 		const factory = new ethers.Contract(
-			"0xB1D11a2b59bB6B0c5D61A2eE765ceb8779941b57",
+			"0xd9369d77c799Bda1fc320764Ce228e9824181400",
 			abiContract,
 			signer!
 		);
 
 		////Esta Funcion es la que se va a ejecutar cuando hacemos el submit con la data del form
-		const add = await factory.addStringData(
+		const add = await factory.addData(
 			values.fullName,
 			values.email,
 			values.dni,
 			values.deposit,
+			values.dni,
 			values.fullName
 
 			// values.fullName,
@@ -611,7 +614,7 @@ export default function Register() {
 									type="file"
 									id="files"
 									style={{ visibility: "hidden" }}
-									onChange={(e) => convertBase44(e.target.files)}
+									onChange={(e) => generateEncode(e.target.files)}
 								/>
 							</Button>
 						</Grid>
