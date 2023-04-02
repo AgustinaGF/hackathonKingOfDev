@@ -73,14 +73,6 @@ const [addUser] = useMutation<AddUserData>( ADD_USER );
 	});
 
 
-	// const handleSubmit = ( e: React.FormEvent<HTMLFormElement> ) => {
-	// 	e.preventDefault();
-	// 	addUser( { variables: { title, author } } );
-	// 	setTitle( '' );
-	// 	setAuthor( '' );
-	// };
-
-
 	// Convert in base 44 our file
 	const convertBase44 = (files: any) => {
 		new Promise((resolve, reject) => {
