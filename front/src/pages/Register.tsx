@@ -3,7 +3,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { useFormik, useField } from "formik";
 import { object, number, string, ObjectSchema } from "yup";
 import { User } from "../typings/index";
-import abiContract from "../abiContract.json";
+import abiContract from "../abiContractV1NFT.json";
 import { useProvider, useAccount, useSigner, useContract } from "wagmi";
 import { ethers } from "ethers";
 // import { Sidebar } from "../components/Sidebar";
@@ -56,21 +56,7 @@ export default function Register() {
 		},
 	});
 
-	// Convert in base 44 our file
-	// const convertBase44 = (files: any) => {
-	// 	new Promise((resolve, reject) => {
-	// 		const fileReader = new FileReader();
-	// 		console.log(files[0], "hhh");
-	// 		fileReader.readAsDataURL(files![0]);
-	// 		fileReader.onload = () => {
-	// 			const base44 = (fileReader.result as string).substring(
-	// 				(fileReader.result as string).indexOf(",") + 1
-	// 			);
-	// 			console.log(base44);
-	// 		};
-	// 	});
-	// };
-
+	// sha256
 	async function encodeFile(files: any) {
 		const fileData = new Uint8Array(await files.arrayBuffer());
 		const hashBuffer = await crypto.subtle.digest("SHA-256", fileData);
@@ -80,7 +66,6 @@ export default function Register() {
 			.join("");
 		return hashHex;
 	}
-
 	async function generateEncode(files: any) {
 		const file = files[0];
 		const hashValue = await encodeFile(file);
@@ -109,17 +94,18 @@ export default function Register() {
 		address?: any;
 	}) {
 		const factory = new ethers.Contract(
-			"0xB1D11a2b59bB6B0c5D61A2eE765ceb8779941b57",
+			"0xd9369d77c799Bda1fc320764Ce228e9824181400",
 			abiContract,
 			signer!
 		);
 
 		////Esta Funcion es la que se va a ejecutar cuando hacemos el submit con la data del form
-		const add = await factory.addStringData(
+		const add = await factory.addData(
 			values.fullName,
 			values.email,
 			values.dni,
 			values.deposit,
+			values.dni,
 			values.fullName
 
 			// values.fullName,

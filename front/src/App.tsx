@@ -10,9 +10,9 @@ import {
 } from "@web3modal/ethereum";
 import { Web3Modal } from "@web3modal/react";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
-import { arbitrum, mainnet, polygon, goerli } from "wagmi/chains";
+import { arbitrum, mainnet, polygon, goerli, polygonMumbai } from "wagmi/chains";
 
-const chains = [arbitrum, mainnet, polygon, goerli];
+const chains = [arbitrum, mainnet, polygon, goerli, polygonMumbai];
 const projectId = import.meta.env.VITE_PROJECT_ID;
 
 const { provider } = configureChains(chains, [w3mProvider({ projectId })]);
