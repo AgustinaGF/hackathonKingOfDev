@@ -6,7 +6,12 @@ import { User } from "../typings/index";
 import abiContract from "../abiContractV1NFT.json";
 import { useProvider, useAccount, useSigner, useContract } from "wagmi";
 import { ethers } from "ethers";
+
+import { Link } from "react-router-dom";
+// import { Sidebar } from "../components/Sidebar";
+
 import { gql, useMutation } from '@apollo/client';
+
 
 
 
@@ -709,15 +714,17 @@ export default function Register() {
 							>
 								Cancelar
 							</Button>
-							<Button
-								variant="contained"
-								type="submit"
-								sx={{
-									backgroundColor: "#265700",
-								}}
-							>
-								Siguiente
-							</Button>
+							<Link to={"/save"}>
+								<Button
+									variant="contained"
+									type="submit"
+									sx={{
+										backgroundColor: "#265700",
+									}}
+								>
+									Siguiente
+								</Button>
+							</Link>
 						</Grid>
 					</Grid>
 				</Box>
