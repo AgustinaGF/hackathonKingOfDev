@@ -84,9 +84,9 @@ export default function Register() {
 		////Esta Funcion es la que se va a ejecutar cuando hacemos el submit con la data del form
 		const add = await factory.addStringData(
 			values.fullName,
-			values.fullName,
-			values.fullName,
-			values.fullName,
+			values.email,
+			values.dni,
+			values.deposit,
 			values.fullName
 
 			// values.fullName,
