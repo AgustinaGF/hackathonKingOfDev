@@ -1,12 +1,11 @@
 export interface User {
-    id?:number
     fullName?: string
     email?: string
     address?: Address
     number?: number
     dni?: number
     status?: string
-    account?: number
+    account?: string
     contracts?: Contract
 }
 
