@@ -1,9 +1,10 @@
 import { Box, Typography, Card, TextField, Button, Grid } from "@mui/material";
+import InputAdornment from '@mui/material/InputAdornment';
 import { useFormik, useField } from "formik";
 import { object, number, string, ObjectSchema } from "yup";
 import { User } from "../typings/index";
 
-const validationSchema: ObjectSchema<User> = object({
+const validationSchema: ObjectSchema<User> = object( {
 	fullName: string(),
 	email: string(),
 	phone: number(),
@@ -20,11 +21,11 @@ const validationSchema: ObjectSchema<User> = object({
 	city: string(),
 	state: string(),
 	zipCode: number(),
-});
+} );
 
 //REEMPLAZAR TODA LA INFO QUE VIENE DE WALLET DE HASH Y DE CONTRATO POR LOS DATOS DE ESTADO PARA MANDAR EL FORM
 export default function Register() {
-	const formik = useFormik({
+	const formik = useFormik( {
 		initialValues: {
 			fullName: "fullName",
 			email: "email@example.com",
@@ -44,24 +45,24 @@ export default function Register() {
 			zipCode: 1022,
 		},
 		validationSchema: validationSchema,
-		onSubmit: (values) => {
-			alert(JSON.stringify(values, null, 2));
+		onSubmit: ( values ) => {
+			alert( JSON.stringify( values, null, 2 ) );
 		},
-	});
+	} );
 
 	// Convert in base 44 our file
-	const convertBase44 = (files: any) => {
-		new Promise((resolve, reject) => {
+	const convertBase44 = ( files: any ) => {
+		new Promise( ( resolve, reject ) => {
 			const fileReader = new FileReader();
-			console.log(files[0], "hhh");
-			fileReader.readAsDataURL(files![0]);
+			console.log( files[0], "hhh" );
+			fileReader.readAsDataURL( files![0] );
 			fileReader.onload = () => {
-				const base44 = (fileReader.result as string).substring(
-					(fileReader.result as string).indexOf(",") + 1
+				const base44 = ( fileReader.result as string ).substring(
+					( fileReader.result as string ).indexOf( "," ) + 1
 				);
-				console.log(base44);
+				console.log( base44 );
 			};
-		});
+		} );
 	};
 
 	return (
@@ -93,57 +94,122 @@ export default function Register() {
 								id="fullName"
 								name="fullName"
 								placeholder="fullName"
+								type="text"
 								value={formik.values.fullName}
 								onChange={formik.handleChange}
-								error={
-									formik.touched.fullName && Boolean(formik.errors.fullName)
-								}
+								error={formik.touched.fullName && Boolean( formik.errors.fullName )}
 								helperText={formik.touched.fullName && formik.errors.fullName}
 								fullWidth
 							/>
 						</Grid>
 						<Grid item xs={5}>
 							<TextField
-								placeholder="dni"
+								placeholder="DNI"
 								id="dni"
 								name="dni"
-								type="number"
-								fullWidth
+								type='number'
 								value={formik.values.dni}
 								onChange={formik.handleChange}
-								error={formik.touched.dni && Boolean(formik.errors.dni)}
+								error={formik.touched.dni && Boolean( formik.errors.dni )}
 								helperText={formik.touched.dni && formik.errors.dni}
 							/>
 						</Grid>
 						<Grid item xs={5}>
-							<TextField placeholder="Número de Telefono" fullWidth />
+							<TextField placeholder="Phone"
+								id="phone"
+								name="phone"
+								type='number'
+								value={formik.values.phone}
+								onChange={formik.handleChange}
+								error={formik.touched.phone && Boolean( formik.errors.phone )}
+								helperText={formik.touched.phone && formik.errors.phone} fullWidth />
 						</Grid>
 						<Grid item xs={5}>
-							<TextField placeholder="Email" fullWidth />
+							<TextField placeholder="Email"
+								id="email"
+								name="email"
+								type='email'
+								value={formik.values.email}
+								onChange={formik.handleChange}
+								error={formik.touched.email && Boolean( formik.errors.email )}
+								helperText={formik.touched.email && formik.errors.email} fullWidth />
 						</Grid>
 						<Grid item xs={5}>
-							<TextField placeholder="Propietario o Inquilino" fullWidth />
+							<TextField placeholder="Propietario o Inquilino"
+								id="status"
+								name="status"
+
+								value={formik.values.status}
+								onChange={formik.handleChange}
+								error={formik.touched.status && Boolean( formik.errors.status )}
+								helperText={formik.touched.status && formik.errors.status} fullWidth />
 						</Grid>
 						<Grid item xs={5}>
-							<TextField placeholder="Account" fullWidth />
+							<TextField placeholder="wallet"
+								id="account"
+								name="account"
+
+								value={formik.values.account}
+								onChange={formik.handleChange}
+								error={formik.touched.account && Boolean( formik.errors.account )}
+								helperText={formik.touched.account && formik.errors.account}
+								fullWidth />
 						</Grid>
 						<Grid item xs={10}>
 							<Typography>Dirección</Typography>
 						</Grid>
 						<Grid item xs={5}>
-							<TextField placeholder="Calle" fullWidth />
+							<TextField placeholder="Street Name"
+								id="streetName"
+								name="streetName"
+
+								value={formik.values.streetName}
+								onChange={formik.handleChange}
+								error={formik.touched.streetName && Boolean( formik.errors.streetName )}
+								helperText={formik.touched.streetName && formik.errors.streetName} fullWidth />
 						</Grid>
 						<Grid item xs={5}>
-							<TextField placeholder="Número de la casa" fullWidth />
+							<TextField placeholder="Street Number"
+								id="streetNumber"
+								name="streetNumber"
+								type="number"
+								InputProps={{
+									startAdornment: <InputAdornment position="start">#</InputAdornment>,
+								}}
+								value={formik.values.streetNumber}
+								onChange={formik.handleChange}
+								error={formik.touched.streetNumber && Boolean( formik.errors.streetNumber )}
+								helperText={formik.touched.streetNumber && formik.errors.streetNumber} fullWidth />
 						</Grid>
 						<Grid item xs={5}>
-							<TextField placeholder="Localidad" fullWidth />
+							<TextField placeholder="City"
+								id="city"
+								name="city"
+
+								value={formik.values.city}
+								onChange={formik.handleChange}
+								error={formik.touched.city && Boolean( formik.errors.city )}
+								helperText={formik.touched.city && formik.errors.city} fullWidth />
 						</Grid>
 						<Grid item xs={5}>
-							<TextField placeholder="Provincia" fullWidth />
+							<TextField placeholder="State"
+								id="state"
+								name="state"
+
+								value={formik.values.state}
+								onChange={formik.handleChange}
+								error={formik.touched.state && Boolean( formik.errors.state )}
+								helperText={formik.touched.state && formik.errors.state} fullWidth />
 						</Grid>
 						<Grid item xs={5}>
-							<TextField placeholder="Codigo Postal" fullWidth />
+							<TextField placeholder="ZIP code"
+								id="zipCode"
+								name="zipCode"
+								type="number"
+								value={formik.values.zipCode}
+								onChange={formik.handleChange}
+								error={formik.touched.zipCode && Boolean( formik.errors.zipCode )}
+								helperText={formik.touched.zipCode && formik.errors.zipCode} fullWidth />
 						</Grid>
 						<Grid item xs={5}></Grid>
 
@@ -151,10 +217,41 @@ export default function Register() {
 							<Typography>Contrato</Typography>
 						</Grid>
 						<Grid item xs={5}>
-							<TextField placeholder="Nombre de las partes" fullWidth />
+							<TextField placeholder="Contract type"
+								id="contractName"
+								name="contractName"
+
+								value={formik.values.contractName}
+								onChange={formik.handleChange}
+								error={formik.touched.contractName && Boolean( formik.errors.contractName )}
+								helperText={formik.touched.contractName && formik.errors.contractName}
+								fullWidth />
 						</Grid>
 						<Grid item xs={5}>
-							<TextField placeholder="Monto de contrato" fullWidth />
+							<TextField placeholder="Deposit"
+								id="deposit"
+								name="deposit"
+								type="number"
+								InputProps={{
+									startAdornment: <InputAdornment position="start">$</InputAdornment>,
+								}}
+								value={formik.values.deposit}
+								onChange={formik.handleChange}
+								error={formik.touched.deposit && Boolean( formik.errors.deposit )}
+								helperText={formik.touched.deposit && formik.errors.deposit} fullWidth />
+						</Grid>
+						<Grid item xs={5}>
+							<TextField placeholder="Rent"
+								id="rent"
+								name="rent"
+								type="number"
+								InputProps={{
+									startAdornment: <InputAdornment position="start">$</InputAdornment>,
+								}}
+								value={formik.values.rent}
+								onChange={formik.handleChange}
+								error={formik.touched.rent && Boolean( formik.errors.rent )}
+								helperText={formik.touched.rent && formik.errors.rent} fullWidth />
 						</Grid>
 						<Grid item xs={10}>
 							<Button
@@ -168,7 +265,7 @@ export default function Register() {
 									type="file"
 									id="files"
 									style={{ visibility: "hidden" }}
-									onChange={(e) => convertBase44(e.target.files)}
+									onChange={( e ) => convertBase44( e.target.files )}
 								/>
 							</Button>
 						</Grid>
