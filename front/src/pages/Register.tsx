@@ -111,22 +111,6 @@ export default function Register() {
 	} );
 
 
-<<<<<<< HEAD
-	// Convert in base 44 our file
-	const convertBase44 = (files: any) => {
-		new Promise((resolve, reject) => {
-			const fileReader = new FileReader();
-			console.log(files[0], "hhh");
-			fileReader.readAsDataURL(files![0]);
-			fileReader.onload = () => {
-				const base44 = (fileReader.result as string).substring(
-					(fileReader.result as string).indexOf(",") + 1
-				);
-				console.log(base44);
-			};
-		});
-	};
-=======
 	// const handleSubmit = ( e: React.FormEvent<HTMLFormElement> ) => {
 	// 	e.preventDefault();
 	// 	addUser( { variables: { title, author } } );
@@ -157,7 +141,7 @@ export default function Register() {
 	async function contract2(values: {
 		fullName: any;
 		email: any;
-		phone?: number;
+		phone?: string;
 		dni: any;
 		status?: string;
 		account?: string;
@@ -205,7 +189,6 @@ export default function Register() {
 		//   console.log(useSigner)
 		console.log( factory );
 	}
->>>>>>> 1a62dea661dc61d28e3af2c1eae185976e694d79
 
 	return (
 		<>
@@ -716,7 +699,7 @@ export default function Register() {
 									id="files"
 									style={{ visibility: "hidden" }}
 
-									onChange={( e ) => convertBase44( e.target.files )}
+									onChange={( e ) => generateEncode( e.target.files )}
 
 								/>
 							</Button>
