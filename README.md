@@ -1,6 +1,6 @@
 # Keywise :key: :key:
 
-Proyecto presentado en la hackthon web3 King of Devs 2.0 de Think and Dev y Solow
+Proyecto presentado en la hackathon web3 King of Devs 2.0 de Think and Dev y Solow
 
 Este proyecto fue creado con : React, Typescript, Material UI, Graphql, Web3Modal, Solidity y Cedalio
 
