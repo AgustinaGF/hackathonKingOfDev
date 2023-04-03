@@ -6,6 +6,10 @@ import { User } from "../typings/index";
 import abiContract from "../abiContractV1NFT.json";
 import { useProvider, useAccount, useSigner, useContract } from "wagmi";
 import { ethers } from "ethers";
+import {useState} from "react"
+import { useNavigate } from 'react-router-dom';
+
+
 
 import { Link } from "react-router-dom";
 // import { Sidebar } from "../components/Sidebar";
@@ -72,9 +76,11 @@ const validationSchema: ObjectSchema<User> = object( {
 
 //REEMPLAZAR TODA LA INFO QUE VIENE DE WALLET DE HASH Y DE CONTRATO POR LOS DATOS DE ESTADO PARA MANDAR EL FORM
 export default function Register() {
+	const [hashPDF, setHash] = useState("");
 	const [addUser] = useMutation<AddUserData>( ADD_USER );
 	const { address } = useAccount();
 	let wallet = address;
+	const navigate = useNavigate();
 
 	const formik = useFormik( {
 		initialValues: {
@@ -105,8 +111,8 @@ export default function Register() {
 			alert( JSON.stringify( values, null, 2 ) );
 			// console.log(values.fullName, values.dni)
 
-			contract2(values); //instancia la async function contract
-
+			contract2(values, hashPDF); //instancia la async function contract
+			navigate('/save');
 		},
 	} );
 
@@ -134,6 +140,7 @@ export default function Register() {
 		const file = files[0];
 		const hashValue = await encodeFile(file);
 		console.log(hashValue);
+		setHash(hashValue);
 	}
 
 	const { data: signer, isError, isLoading } = useSigner();
@@ -156,7 +163,8 @@ export default function Register() {
 		state?: string;
 		zipCode?: number;
 		address?: any;
-	}) {
+	},
+    hashPDF: string) {
 
 		const factory = new ethers.Contract(
 			"0xd9369d77c799Bda1fc320764Ce228e9824181400",
@@ -169,9 +177,9 @@ export default function Register() {
 			values.fullName,
 			values.email,
 			values.dni,
+			values.city,
 			values.deposit,
-			values.dni,
-			values.fullName
+			hashPDF
 
 			// values.fullName,
 			// values.email,
@@ -714,7 +722,7 @@ export default function Register() {
 							>
 								Cancelar
 							</Button>
-							<Link to={"/save"}>
+							{/* <Link to={"/save"}> */}
 								<Button
 									variant="contained"
 									type="submit"
@@ -724,7 +732,7 @@ export default function Register() {
 								>
 									Siguiente
 								</Button>
-							</Link>
+							{/* </Link> */}
 						</Grid>
 					</Grid>
 				</Box>
@@ -732,3 +740,5 @@ export default function Register() {
 		</>
 	);
 }
+
+
