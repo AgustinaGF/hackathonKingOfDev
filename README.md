@@ -22,7 +22,7 @@ Este proyecto fue creado con : React, Typescript, Material UI, Graphql, Web3Moda
         http://localhost:5173/
         
         
-## Tambien podes probar el proyecto ay deployado  [URL](https://hackaton-navy.vercel.app/) :confetti_ball: :confetti_ball:
+## Tambien podes probar el proyecto ya deployado  [URL](https://hackaton-navy.vercel.app/) :confetti_ball: :confetti_ball:
 
         
         
