@@ -31,6 +31,9 @@ function App() {
 				<Route path="/" element={<Home />} />
 				<Route path="/register" element={<Register />} />
 				<Route path="/save" element={<SaveContract />} />
+				<Route path="/invest" element={<Register />} />
+				<Route path="/profile" element={<Register />} />
+				
 			</Routes>
 			<Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
 		</WagmiConfig>
